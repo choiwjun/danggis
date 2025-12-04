@@ -1,0 +1,287 @@
+// Prisma Schema for 당골래 (Danggolrae) Platform
+// Database: PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// 사용자 관련 모델
+// ============================================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // bcrypt 해시된 비밀번호
+  nickname  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  reviews          Review[]
+  favorites        Favorite[]
+  admin            Admin?
+  aiSessions       AiSession[]
+  userSajuProfile  UserSajuProfile?
+  aiFeedbacks      AiFeedback[]
+
+  @@map("users")
+}
+
+model Admin {
+  id     String @id @default(cuid())
+  userId String @unique
+  role   String @default("admin") // admin, super_admin
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  auditLogs  AuditLog[]
+  createdPlaces PrayerPlace[] @relation("CreatedByAdmin")
+
+  @@map("admins")
+}
+
+// ============================================
+// 기도터 관련 모델
+// ============================================
+
+model PrayerPlace {
+  id              String   @id @default(cuid())
+  name            String
+  slug            String   @unique
+  description     String?  @db.Text
+  addressFull     String
+  regionId        String?
+  placeTypeId     String?
+  latitude        Float?
+  longitude       Float?
+  naverPlaceId    String?  @unique
+  staticMapUrl    String?
+  phone           String?
+  website         String?
+  businessHours   String?  @db.Text
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  createdByAdminId String?
+
+  // Relations
+  region         RegionArea?      @relation(fields: [regionId], references: [id])
+  placeType      PlaceType?       @relation(fields: [placeTypeId], references: [id])
+  createdByAdmin Admin?           @relation("CreatedByAdmin", fields: [createdByAdminId], references: [id])
+  images         PlaceImage[]
+  deityTags      PlaceDeityTag[]
+  reviews        Review[]
+  favorites      Favorite[]
+  aiMessages     AiMessage[]
+
+  @@index([slug])
+  @@index([regionId])
+  @@index([placeTypeId])
+  @@index([isActive])
+  @@map("prayer_places")
+}
+
+model PlaceType {
+  id     String @id @default(cuid())
+  code   String @unique // temple, shrine, gutdang, etc.
+  nameKo String
+
+  places PrayerPlace[]
+
+  @@map("place_types")
+}
+
+model DeityTag {
+  id     String @id @default(cuid())
+  code   String @unique // yonggung, sansin, janggun, dosa, etc.
+  nameKo String
+
+  placeTags PlaceDeityTag[]
+
+  @@map("deity_tags")
+}
+
+model PlaceDeityTag {
+  id         String @id @default(cuid())
+  placeId    String
+  deityTagId String
+
+  place     PrayerPlace @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  deityTag  DeityTag    @relation(fields: [deityTagId], references: [id], onDelete: Cascade)
+
+  @@unique([placeId, deityTagId])
+  @@map("place_deity_tags")
+}
+
+model RegionArea {
+  id       String  @id @default(cuid())
+  name     String
+  parentId String?
+
+  parent   RegionArea?    @relation("RegionHierarchy", fields: [parentId], references: [id])
+  children RegionArea[]   @relation("RegionHierarchy")
+  places   PrayerPlace[]
+
+  @@map("region_areas")
+}
+
+model PlaceImage {
+  id      String  @id @default(cuid())
+  placeId String
+  url     String
+  isMain  Boolean @default(false)
+  order   Int     @default(0)
+
+  place PrayerPlace @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  @@index([placeId])
+  @@map("place_images")
+}
+
+// ============================================
+// 후기 관련 모델
+// ============================================
+
+model Review {
+  id        String    @id @default(cuid())
+  placeId   String
+  userId    String
+  rating    Int?      // 1-5 별점 (선택적)
+  content   String    @db.Text
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  place  PrayerPlace   @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  images ReviewImage[]
+
+  @@index([placeId])
+  @@index([userId])
+  @@map("reviews")
+}
+
+model ReviewImage {
+  id       String @id @default(cuid())
+  reviewId String
+  url      String
+  order    Int    @default(0)
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@index([reviewId])
+  @@map("review_images")
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  placeId   String
+  createdAt DateTime @default(now())
+
+  user  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  place PrayerPlace @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, placeId])
+  @@index([userId])
+  @@index([placeId])
+  @@map("favorites")
+}
+
+// ============================================
+// 관리자 감사 로그
+// ============================================
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  adminId    String
+  action     String   // create, update, delete, etc.
+  targetType String   // PrayerPlace, User, Review, etc.
+  targetId   String
+  details    String?  @db.Text
+  createdAt  DateTime @default(now())
+
+  admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@index([adminId])
+  @@index([targetType, targetId])
+  @@map("audit_logs")
+}
+
+// ============================================
+// AI 도우미 관련 모델
+// ============================================
+
+model AiSession {
+  id             String   @id @default(cuid())
+  userId         String?  // null이면 비로그인 사용자 (게스트)
+  title          String   @default("새로운 대화")
+  mode           String   @default("general") // general, saju
+  startedAt      DateTime @default(now())
+  lastActivityAt DateTime @default(now())
+  isPinned       Boolean  @default(false)
+
+  user     User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  messages AiMessage[]
+
+  @@index([userId])
+  @@map("ai_sessions")
+}
+
+model AiMessage {
+  id         String   @id @default(cuid())
+  sessionId  String
+  senderType String   // user, assistant, system
+  content    String   @db.Text
+  placeId    String?  // 기도터 관련 메시지인 경우
+  metadata   String?  @db.Text // JSON 형태로 추가 데이터 저장
+  createdAt  DateTime @default(now())
+
+  session   AiSession    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  place     PrayerPlace? @relation(fields: [placeId], references: [id], onDelete: SetNull)
+  feedbacks AiFeedback[]
+
+  @@index([sessionId])
+  @@index([placeId])
+  @@map("ai_messages")
+}
+
+model AiFeedback {
+  id        String   @id @default(cuid())
+  messageId String
+  userId    String?  // null이면 비로그인 사용자 (게스트)
+  feedback  String   // like, dislike
+  comment   String?  @db.Text
+  createdAt DateTime @default(now())
+
+  message AiMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@unique([messageId, userId])
+  @@index([messageId])
+  @@map("ai_feedbacks")
+}
+
+// ============================================
+// 사주 프로필 (옵션)
+// ============================================
+
+model UserSajuProfile {
+  id         String    @id @default(cuid())
+  userId     String    @unique
+  birthDate  DateTime
+  birthTime  String?   // HH:mm 형식
+  isLunar    Boolean   @default(false)
+  gender     String?   // male, female
+  sajuJson   String?   @db.Text // JSON 형태로 사주팔자 결과 저장
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_saju_profiles")
+}
