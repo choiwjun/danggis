@@ -19,23 +19,25 @@ export default function Header() {
     ];
 
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
+        <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/95 backdrop-blur-md shadow-sm supports-[backdrop-filter]:bg-white/90">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                     {/* 로고 */}
-                    <Link href="/" className="flex items-center space-x-2">
-                        <span className="text-2xl font-bold text-primary">당골래</span>
+                    <Link href="/" className="flex items-center gap-2 group">
+                        <span className="text-2xl">🙏</span>
+                        <span className="text-2xl font-bold text-primary group-hover:text-primary-dark transition-colors">당골래</span>
                     </Link>
 
                     {/* 데스크탑 네비게이션 */}
-                    <nav className="hidden md:flex md:items-center md:space-x-8">
+                    <nav className="hidden md:flex md:items-center md:gap-6">
                         {navItems.map((item) => (
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className="text-sm font-medium text-gray-700 transition-colors hover:text-primary"
+                                className="text-sm font-semibold text-gray-600 transition-all hover:text-primary relative group py-1"
                             >
                                 {item.label}
+                                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
                             </Link>
                         ))}
                     </nav>
@@ -62,16 +64,16 @@ export default function Header() {
                                 </button>
                             </div>
                         ) : (
-                            <div className="flex items-center space-x-4">
+                            <div className="flex items-center gap-3">
                                 <Link
                                     href="/auth/signin"
-                                    className="text-sm font-medium text-gray-700 hover:text-primary"
+                                    className="text-sm font-semibold text-gray-600 hover:text-primary transition-colors"
                                 >
                                     로그인
                                 </Link>
                                 <Link
                                     href="/auth/signup"
-                                    className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark"
+                                    className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-dark hover:shadow-md transition-all active:scale-95"
                                 >
                                     회원가입
                                 </Link>

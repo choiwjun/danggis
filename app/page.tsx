@@ -57,42 +57,50 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero 섹션 */}
-      <section className="relative overflow-hidden bg-primary-soft/30 py-20 sm:py-32">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary-soft/40 via-white to-primary-soft/20 py-24 sm:py-32">
+        <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-5"></div>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              당골래 <span className="text-primary">기도터 탐색</span>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+              <span>🙏</span>
+              <span>전국 기도터 탐색 플랫폼</span>
+            </div>
+            <h1 className="text-5xl font-extrabold tracking-tight text-gray-900 sm:text-6xl lg:text-7xl">
+              당골래에서
+              <br />
+              <span className="bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent">당신만의 기도터</span>를 찾으세요
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              줄·유형·내 주변·지도에서 전국 기도터를 한 번에 찾아보세요.<br />
+            <p className="mt-8 text-lg leading-relaxed text-gray-600 sm:text-xl">
+              줄·유형·내 주변·지도에서 전국 기도터를 한 번에 찾아보세요.
+              <br className="hidden sm:block" />
               당골래가 당신에게 맞는 영험한 기도터를 안내합니다.
             </p>
 
             {/* 검색바 */}
-            <div className="mt-10 flex items-center justify-center gap-x-4">
-              <div className="relative w-full max-w-md">
+            <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+              <div className="relative w-full max-w-lg">
                 <Input
                   type="text"
                   placeholder="지역명, 기도터 이름으로 검색..."
-                  className="h-12 rounded-full border-gray-300 pl-12 pr-4 shadow-sm focus:border-primary focus:ring-primary"
+                  className="h-14 rounded-2xl border-gray-200 pl-14 pr-4 text-base shadow-lg focus:border-primary focus:ring-primary focus:shadow-xl transition-all"
                 />
-                <Search className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
+                <Search className="absolute left-5 top-4 h-6 w-6 text-gray-400" />
               </div>
-              <Button size="lg" className="h-12 rounded-full px-8">
+              <Button size="lg" className="w-full sm:w-auto h-14 rounded-2xl px-8 shadow-lg hover:shadow-xl">
                 검색
               </Button>
             </div>
 
-            <div className="mt-8 flex justify-center gap-4">
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link href="/map">
-                <Button variant="outline" className="rounded-full border-primary text-primary hover:bg-primary-soft">
-                  <Map className="mr-2 h-4 w-4" />
+                <Button variant="soft" size="lg" className="gap-2">
+                  <Map className="h-5 w-5" />
                   지도에서 찾기
                 </Button>
               </Link>
               <Link href="/places/nearby">
-                <Button variant="outline" className="rounded-full">
-                  <MapPin className="mr-2 h-4 w-4" />
+                <Button variant="soft" size="lg" className="gap-2">
+                  <MapPin className="h-5 w-5" />
                   내 주변 기도터
                 </Button>
               </Link>
@@ -102,19 +110,24 @@ export default function HomePage() {
       </section>
 
       {/* 추천 기도터 섹션 */}
-      <section className="py-16 sm:py-24">
+      <section className="py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-10 flex items-end justify-between">
+          <div className="mb-12 flex items-end justify-between">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-lg bg-primary-soft px-3 py-1 text-xs font-bold text-primary">
+                <span>✨</span>
+                <span>추천</span>
+              </div>
+              <h2 className="text-4xl font-bold tracking-tight text-gray-900">
                 촉이 오는 기도터
               </h2>
-              <p className="mt-2 text-gray-600">
+              <p className="mt-3 text-base text-gray-600">
                 많은 분들이 찾고 효험을 본 인기 기도터입니다.
               </p>
             </div>
-            <Link href="/places" className="hidden text-sm font-semibold text-primary hover:text-primary-dark sm:block">
-              전체보기 <span aria-hidden="true">&rarr;</span>
+            <Link href="/places" className="hidden group items-center gap-2 text-sm font-bold text-primary hover:text-primary-dark sm:flex">
+              전체보기 
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
 
@@ -124,10 +137,10 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="mt-8 text-center sm:hidden">
+          <div className="mt-10 text-center sm:hidden">
             <Link href="/places">
-              <Button variant="outline" className="w-full">
-                전체보기
+              <Button variant="soft" size="lg" className="w-full max-w-sm">
+                모든 기도터 보기
               </Button>
             </Link>
           </div>
@@ -135,11 +148,20 @@ export default function HomePage() {
       </section>
 
       {/* 줄별 기도터 섹션 */}
-      <section className="bg-gray-50 py-16 sm:py-24">
+      <section className="bg-gradient-to-b from-gray-50 to-white py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="mb-10 text-center text-3xl font-bold tracking-tight text-gray-900">
-            나에게 맞는 줄을 찾아보세요
-          </h2>
+          <div className="mb-12 text-center">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-bold text-primary shadow-sm">
+              <span>🎯</span>
+              <span>줄별 분류</span>
+            </div>
+            <h2 className="text-4xl font-bold tracking-tight text-gray-900">
+              나에게 맞는 줄을 찾아보세요
+            </h2>
+            <p className="mt-4 text-base text-gray-600">
+              각 줄의 특성에 맞는 기도터를 추천해드립니다.
+            </p>
+          </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <LineCategoryCard
@@ -175,15 +197,18 @@ export default function HomePage() {
 
 function LineCategoryCard({ title, desc, color, href }: { title: string, desc: string, color: string, href: string }) {
   return (
-    <Link href={href} className="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
-      <div className={`absolute right-0 top-0 h-24 w-24 translate-x-8 translate-y--8 rounded-full ${color} opacity-10 transition-transform group-hover:scale-150`}></div>
-      <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl ${color} text-white shadow-sm`}>
-        <span className="text-lg font-bold">{title[0]}</span>
-      </div>
-      <h3 className="text-lg font-bold text-gray-900">{title}</h3>
-      <p className="mt-1 text-sm text-gray-500">{desc}</p>
-      <div className="mt-4 flex items-center text-sm font-medium text-gray-400 group-hover:text-primary">
-        살펴보기 <ArrowRight className="ml-1 h-4 w-4" />
+    <Link href={href} className="group relative overflow-hidden rounded-2xl bg-white p-8 shadow-sm border border-gray-100 transition-all hover:-translate-y-2 hover:shadow-xl">
+      <div className={`absolute -right-6 -top-6 h-32 w-32 rounded-full ${color} opacity-5 transition-all group-hover:scale-150 group-hover:opacity-10`}></div>
+      <div className="relative">
+        <div className={`mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl ${color} text-white shadow-lg transition-transform group-hover:scale-110`}>
+          <span className="text-xl font-bold">{title[0]}</span>
+        </div>
+        <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
+        <p className="text-sm text-gray-600 leading-relaxed">{desc}</p>
+        <div className="mt-5 flex items-center text-sm font-bold text-gray-400 group-hover:text-primary transition-colors">
+          살펴보기 
+          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </div>
       </div>
     </Link>
   );
