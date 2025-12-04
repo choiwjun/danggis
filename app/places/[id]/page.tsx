@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import PlaceDetailMap from "@/components/map/PlaceDetailMap";
+import PlaceChatDrawer from "@/components/ai/PlaceChatDrawer";
 import { PlaceDetail } from "@/types/place";
 
 export default function PlaceDetailPage() {
@@ -15,6 +16,7 @@ export default function PlaceDetailPage() {
     const [place, setPlace] = useState<PlaceDetail | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
+    const [isChatOpen, setIsChatOpen] = useState(false);
 
     useEffect(() => {
         const fetchPlace = async () => {
@@ -205,12 +207,13 @@ export default function PlaceDetailPage() {
                             <p className="mb-6 text-sm text-gray-600">
                                 이 기도터의 영험함, 기도 방법, 준비물 등에 대해 궁금한 점이 있으신가요?
                             </p>
-                            <Link href={`/ai?placeId=${place.id}`}>
-                                <Button className="w-full gap-2">
-                                    <MessageSquare className="h-4 w-4" />
-                                    AI에게 물어보기
-                                </Button>
-                            </Link>
+                            <Button 
+                                className="w-full gap-2"
+                                onClick={() => setIsChatOpen(true)}
+                            >
+                                <MessageSquare className="h-4 w-4" />
+                                AI에게 물어보기
+                            </Button>
                         </div>
 
                         {/* 관리자 정보 (임시) */}
@@ -226,6 +229,14 @@ export default function PlaceDetailPage() {
                     </div>
                 </div>
             </div>
+
+            {/* AI 채팅 드로어 */}
+            <PlaceChatDrawer
+                placeId={place.id}
+                placeName={place.name}
+                isOpen={isChatOpen}
+                onClose={() => setIsChatOpen(false)}
+            />
         </div>
     );
 }
