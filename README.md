@@ -138,7 +138,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY="..."
 - [ ] **Step 4**: 기도터 CRUD
 - [ ] **Step 5**: 주변 기도터 검색
 - [x] **Step 6**: 네이버 지도 연동 (완료)
-- [ ] **Step 7**: AI 도우미 구현
+- [x] **Step 7**: AI 도우미 백엔드 (완료)
 - [ ] **Step 8**: 후기 시스템
 - [ ] **Step 9**: 관리자 페이지
 - [ ] **Step 10**: Vercel 배포
