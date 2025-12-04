@@ -1,101 +1,170 @@
 import Link from "next/link";
-import { MapPin, Map, Sparkles, Heart } from "lucide-react";
+import { MapPin, Map, Search, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import PrayerPlaceCard from "@/components/places/PrayerPlaceCard";
+import { PlaceListItem } from "@/types/place";
+
+// Mock Data
+const MOCK_PLACES: PlaceListItem[] = [
+  {
+    id: "1",
+    name: "계룡산 굿당",
+    slug: "gyeryong-gutdang",
+    addressFull: "충청남도 공주시 계룡면",
+    placeType: { id: "t1", nameKo: "굿당" },
+    deityTags: [{ deityTag: { id: "d1", code: "sansin", nameKo: "산신줄" } }],
+    thumbnail: "https://images.unsplash.com/photo-1518182170546-0766aa6f6914?w=800&q=80",
+    reviewCount: 12,
+    averageRating: 4.5,
+  },
+  {
+    id: "2",
+    name: "태백산 천제단",
+    slug: "taebaek-cheunjedan",
+    addressFull: "강원도 태백시",
+    placeType: { id: "t2", nameKo: "기도터" },
+    deityTags: [{ deityTag: { id: "d2", code: "janggun", nameKo: "장군줄" } }],
+    thumbnail: "https://images.unsplash.com/photo-1505567745926-ba89000d255a?w=800&q=80",
+    reviewCount: 8,
+    averageRating: 4.8,
+  },
+  {
+    id: "3",
+    name: "지리산 용궁",
+    slug: "jirisan-yonggung",
+    addressFull: "전라남도 구례군",
+    placeType: { id: "t3", nameKo: "용궁" },
+    deityTags: [{ deityTag: { id: "d3", code: "yonggung", nameKo: "용궁줄" } }],
+    thumbnail: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
+    reviewCount: 24,
+    averageRating: 4.2,
+  },
+  {
+    id: "4",
+    name: "인왕산 선바위",
+    slug: "inwangsan-seonbawi",
+    addressFull: "서울특별시 종로구",
+    placeType: { id: "t4", nameKo: "기도터" },
+    deityTags: [{ deityTag: { id: "d4", code: "dosa", nameKo: "도사줄" } }],
+    thumbnail: "https://images.unsplash.com/photo-1504194921103-f8b80cadd5e4?w=800&q=80",
+    reviewCount: 56,
+    averageRating: 4.6,
+  },
+];
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary-soft/30 to-white">
+    <div className="min-h-screen bg-white">
       {/* Hero 섹션 */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
-            전국 기도터를 한눈에
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-            당골래와 함께 사찰, 굿당, 산신당, 서낭당 등<br />
-            전국의 기도터를 탐색하고 소중한 후기를 공유하세요.
-          </p>
-          <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Link
-              href="/places"
-              className="inline-flex items-center rounded-full bg-primary px-8 py-3 text-base font-medium text-white shadow-sm transition-all hover:bg-primary-dark hover:shadow-md"
-            >
-              <MapPin className="mr-2 h-5 w-5" />
-              기도터 둘러보기
+      <section className="relative overflow-hidden bg-primary-soft/30 py-20 sm:py-32">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+              당골래 <span className="text-primary">기도터 탐색</span>
+            </h1>
+            <p className="mt-6 text-lg leading-8 text-gray-600">
+              줄·유형·내 주변·지도에서 전국 기도터를 한 번에 찾아보세요.<br />
+              당골래가 당신에게 맞는 영험한 기도터를 안내합니다.
+            </p>
+
+            {/* 검색바 */}
+            <div className="mt-10 flex items-center justify-center gap-x-4">
+              <div className="relative w-full max-w-md">
+                <Input
+                  type="text"
+                  placeholder="지역명, 기도터 이름으로 검색..."
+                  className="h-12 rounded-full border-gray-300 pl-12 pr-4 shadow-sm focus:border-primary focus:ring-primary"
+                />
+                <Search className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
+              </div>
+              <Button size="lg" className="h-12 rounded-full px-8">
+                검색
+              </Button>
+            </div>
+
+            <div className="mt-8 flex justify-center gap-4">
+              <Link href="/map">
+                <Button variant="outline" className="rounded-full border-primary text-primary hover:bg-primary-soft">
+                  <Map className="mr-2 h-4 w-4" />
+                  지도에서 찾기
+                </Button>
+              </Link>
+              <Link href="/places/nearby">
+                <Button variant="outline" className="rounded-full">
+                  <MapPin className="mr-2 h-4 w-4" />
+                  내 주변 기도터
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 추천 기도터 섹션 */}
+      <section className="py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-10 flex items-end justify-between">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+                촉이 오는 기도터
+              </h2>
+              <p className="mt-2 text-gray-600">
+                많은 분들이 찾고 효험을 본 인기 기도터입니다.
+              </p>
+            </div>
+            <Link href="/places" className="hidden text-sm font-semibold text-primary hover:text-primary-dark sm:block">
+              전체보기 <span aria-hidden="true">&rarr;</span>
             </Link>
-            <Link
-              href="/map"
-              className="inline-flex items-center rounded-full border border-primary bg-transparent px-8 py-3 text-base font-medium text-primary transition-all hover:bg-primary-soft"
-            >
-              <Map className="mr-2 h-5 w-5" />
-              지도에서 찾기
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {MOCK_PLACES.map((place) => (
+              <PrayerPlaceCard key={place.id} place={place} />
+            ))}
+          </div>
+
+          <div className="mt-8 text-center sm:hidden">
+            <Link href="/places">
+              <Button variant="outline" className="w-full">
+                전체보기
+              </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* 주요 기능 */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <h2 className="mb-12 text-center text-3xl font-bold text-gray-900">
-          당골래의 주요 기능
-        </h2>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          <FeatureCard
-            icon={<MapPin className="h-8 w-8 text-primary" />}
-            title="기도터 탐색"
-            description="전국의 기도터를 검색하고 상세 정보를 확인하세요"
-            href="/places"
-          />
-          <FeatureCard
-            icon={<Map className="h-8 w-8 text-line-yonggung" />}
-            title="지도 검색"
-            description="네이버 지도로 내 주변 기도터를 찾아보세요"
-            href="/map"
-          />
-          <FeatureCard
-            icon={<Sparkles className="h-8 w-8 text-line-dosa" />}
-            title="당골래 AI"
-            description="AI 도우미와 대화하며 기도터 정보와 사주를 확인하세요"
-            href="/ai"
-          />
-          <FeatureCard
-            icon={<Heart className="h-8 w-8 text-line-janggun" />}
-            title="후기 공유"
-            description="다녀온 기도터의 경험을 공유하고 다른 이의 후기를 읽어보세요"
-            href="/reviews"
-          />
-        </div>
-      </section>
-
-      {/* 줄별 기도터 */}
-      <section className="bg-gray-50 py-16">
+      {/* 줄별 기도터 섹션 */}
+      <section className="bg-gray-50 py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="mb-8 text-center text-3xl font-bold text-gray-900">
-            줄별 기도터
+          <h2 className="mb-10 text-center text-3xl font-bold tracking-tight text-gray-900">
+            나에게 맞는 줄을 찾아보세요
           </h2>
+
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <LineCard
-              name="용궁줄"
+            <LineCategoryCard
+              title="용궁줄"
+              desc="물과 관련된 기운"
               color="bg-line-yonggung"
-              bgColor="bg-blue-50"
-              href="/lines/yonggung"
+              href="/places?line=yonggung"
             />
-            <LineCard
-              name="산신줄"
+            <LineCategoryCard
+              title="산신줄"
+              desc="산의 기운을 받는"
               color="bg-line-sansin"
-              bgColor="bg-green-50"
-              href="/lines/sansin"
+              href="/places?line=sansin"
             />
-            <LineCard
-              name="장군줄"
+            <LineCategoryCard
+              title="장군줄"
+              desc="강인한 기운"
               color="bg-line-janggun"
-              bgColor="bg-orange-50"
-              href="/lines/janggun"
+              href="/places?line=janggun"
             />
-            <LineCard
-              name="도사줄"
+            <LineCategoryCard
+              title="도사줄"
+              desc="지혜와 깨달음"
               color="bg-line-dosa"
-              bgColor="bg-purple-50"
-              href="/lines/dosa"
+              href="/places?line=dosa"
             />
           </div>
         </div>
@@ -104,51 +173,18 @@ export default function HomePage() {
   );
 }
 
-function FeatureCard({
-  icon,
-  title,
-  description,
-  href,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  href: string;
-}) {
+function LineCategoryCard({ title, desc, color, href }: { title: string, desc: string, color: string, href: string }) {
   return (
-    <Link
-      href={href}
-      className="group rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
-    >
-      <div className="mb-4">{icon}</div>
-      <h3 className="mb-2 text-lg font-semibold text-gray-900">{title}</h3>
-      <p className="text-sm text-gray-600">{description}</p>
-    </Link>
-  );
-}
-
-function LineCard({
-  name,
-  color,
-  bgColor,
-  href,
-}: {
-  name: string;
-  color: string;
-  bgColor: string;
-  href: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`${bgColor} group rounded-2xl p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md`}
-    >
-      <div className={`inline-block rounded-full ${color} px-4 py-2 text-sm font-medium text-white`}>
-        {name}
+    <Link href={href} className="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
+      <div className={`absolute right-0 top-0 h-24 w-24 translate-x-8 translate-y--8 rounded-full ${color} opacity-10 transition-transform group-hover:scale-150`}></div>
+      <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl ${color} text-white shadow-sm`}>
+        <span className="text-lg font-bold">{title[0]}</span>
       </div>
-      <p className="mt-3 text-sm text-gray-600">
-        {name}의 기도터를 탐색해보세요
-      </p>
+      <h3 className="text-lg font-bold text-gray-900">{title}</h3>
+      <p className="mt-1 text-sm text-gray-500">{desc}</p>
+      <div className="mt-4 flex items-center text-sm font-medium text-gray-400 group-hover:text-primary">
+        살펴보기 <ArrowRight className="ml-1 h-4 w-4" />
+      </div>
     </Link>
   );
 }
