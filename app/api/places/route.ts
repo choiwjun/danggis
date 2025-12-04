@@ -60,6 +60,8 @@ export async function GET(request: NextRequest) {
                     name: true,
                     slug: true,
                     addressFull: true,
+                    latitude: true,
+                    longitude: true,
                     placeType: {
                         select: { id: true, nameKo: true },
                     },
@@ -91,6 +93,8 @@ export async function GET(request: NextRequest) {
             name: place.name,
             slug: place.slug,
             addressFull: place.addressFull,
+            latitude: place.latitude,
+            longitude: place.longitude,
             placeType: place.placeType,
             deityTags: place.deityTags,
             thumbnail: place.images[0]?.url || null,

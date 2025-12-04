@@ -133,14 +133,15 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY="..."
 ## 개발 로드맵
 
 - [x] **Step 1**: Next.js 초기 세팅 (완료)
-- [ ] **Step 2**: Prisma + DB 스키마
-- [ ] **Step 3**: NextAuth 인증
+- [x] **Step 2**: Prisma + DB 스키마 (완료)
+- [x] **Step 3**: NextAuth 인증 (완료)
 - [ ] **Step 4**: 기도터 CRUD
-- [ ] **Step 5**: 네이버 지도 연동
-- [ ] **Step 6**: AI 도우미 구현
-- [ ] **Step 7**: 후기 시스템
-- [ ] **Step 8**: 관리자 페이지
-- [ ] **Step 9**: Vercel 배포
+- [ ] **Step 5**: 주변 기도터 검색
+- [x] **Step 6**: 네이버 지도 연동 (완료)
+- [ ] **Step 7**: AI 도우미 구현
+- [ ] **Step 8**: 후기 시스템
+- [ ] **Step 9**: 관리자 페이지
+- [ ] **Step 10**: Vercel 배포
 
 ## 라이선스
 

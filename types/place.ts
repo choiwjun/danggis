@@ -6,6 +6,8 @@ export interface PlaceListItem {
     name: string;
     slug: string;
     addressFull: string;
+    latitude?: number | null; // 지도 표시용
+    longitude?: number | null; // 지도 표시용
     placeType: {
         id: string;
         nameKo: string;

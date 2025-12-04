@@ -7,6 +7,7 @@ import { MapPin, Phone, Clock, Globe, Share2, Heart, MessageSquare, Sparkles, Lo
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import PlaceDetailMap from "@/components/map/PlaceDetailMap";
 import { PlaceDetail } from "@/types/place";
 
 export default function PlaceDetailPage() {
@@ -145,13 +146,18 @@ export default function PlaceDetailPage() {
                         </div>
                     </div>
 
-                    {/* 지도 (Placeholder) */}
-                    <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                        <h2 className="mb-4 text-xl font-bold text-gray-900">위치</h2>
-                        <div className="aspect-[2/1] w-full rounded-xl bg-gray-100 flex items-center justify-center text-gray-500">
-                            네이버 지도 영역 (Step 6 연동 예정)
+                    {/* 지도 */}
+                    {place.latitude && place.longitude && (
+                        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                            <h2 className="mb-4 text-xl font-bold text-gray-900">위치</h2>
+                            <PlaceDetailMap
+                                latitude={place.latitude}
+                                longitude={place.longitude}
+                                placeName={place.name}
+                                address={place.addressFull}
+                            />
                         </div>
-                    </div>
+                    )}
 
                     {/* 후기 (Placeholder) */}
                     <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">

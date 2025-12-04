@@ -1,20 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, MapPin, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import PrayerPlaceCard from "@/components/places/PrayerPlaceCard";
+import MapView from "@/components/map/MapView";
 import { PlaceListItem } from "@/types/place";
 
-// Mock Data for Map List
+// Mock Data for Map List (나중에 API로 대체)
 const MOCK_MAP_PLACES: PlaceListItem[] = [
     {
         id: "1",
         name: "계룡산 굿당",
         slug: "gyeryong-gutdang",
         addressFull: "충청남도 공주시 계룡면",
+        latitude: 36.3484,
+        longitude: 127.2175,
         placeType: { id: "t1", nameKo: "굿당" },
         deityTags: [{ deityTag: { id: "d1", code: "sansin", nameKo: "산신줄" } }],
         thumbnail: "https://images.unsplash.com/photo-1518182170546-0766aa6f6914?w=800&q=80",
@@ -27,6 +30,8 @@ const MOCK_MAP_PLACES: PlaceListItem[] = [
         name: "태백산 천제단",
         slug: "taebaek-cheunjedan",
         addressFull: "강원도 태백시",
+        latitude: 37.1657,
+        longitude: 128.9857,
         placeType: { id: "t2", nameKo: "기도터" },
         deityTags: [{ deityTag: { id: "d2", code: "janggun", nameKo: "장군줄" } }],
         thumbnail: "https://images.unsplash.com/photo-1505567745926-ba89000d255a?w=800&q=80",
@@ -34,10 +39,62 @@ const MOCK_MAP_PLACES: PlaceListItem[] = [
         averageRating: 4.8,
         distance: 5.4,
     },
+    {
+        id: "3",
+        name: "지리산 용궁",
+        slug: "jirisan-yonggung",
+        addressFull: "전라남도 구례군",
+        latitude: 35.3393,
+        longitude: 127.7314,
+        placeType: { id: "t3", nameKo: "용궁" },
+        deityTags: [{ deityTag: { id: "d3", code: "yonggung", nameKo: "용궁줄" } }],
+        thumbnail: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
+        reviewCount: 24,
+        averageRating: 4.2,
+        distance: 3.5,
+    },
 ];
 
 export default function MapPage() {
     const [showList, setShowList] = useState(true);
+    const [places, setPlaces] = useState<PlaceListItem[]>(MOCK_MAP_PLACES);
+    const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedLine, setSelectedLine] = useState<string | null>(null);
+
+    // 실제 구현 시 API 호출로 변경
+    useEffect(() => {
+        // 필터링 로직 (Mock)
+        let filtered = MOCK_MAP_PLACES;
+
+        if (searchQuery) {
+            filtered = filtered.filter(
+                (place) =>
+                    place.name.includes(searchQuery) ||
+                    place.addressFull.includes(searchQuery)
+            );
+        }
+
+        if (selectedLine) {
+            filtered = filtered.filter((place) =>
+                place.deityTags.some((tag) => tag.deityTag.code === selectedLine)
+            );
+        }
+
+        setPlaces(filtered);
+    }, [searchQuery, selectedLine]);
+
+    const handlePlaceCardClick = (placeId: string) => {
+        setSelectedPlaceId(placeId);
+    };
+
+    const handleMarkerClick = (placeId: string) => {
+        setSelectedPlaceId(placeId);
+        // 모바일에서는 리스트를 열어줌
+        if (window.innerWidth < 768) {
+            setShowList(true);
+        }
+    };
 
     return (
         <div className="flex h-[calc(100vh-4rem)] flex-col">
@@ -48,16 +105,48 @@ export default function MapPage() {
                         type="text"
                         placeholder="지역, 기도터 검색"
                         className="pl-9"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                     />
                     <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                 </div>
 
                 <div className="flex gap-2 overflow-x-auto pb-1 sm:pb-0">
-                    <Badge variant="outline" className="cursor-pointer hover:bg-gray-100">전체</Badge>
-                    <Badge variant="outline" className="cursor-pointer hover:bg-gray-100">용궁줄</Badge>
-                    <Badge variant="outline" className="cursor-pointer hover:bg-gray-100">산신줄</Badge>
-                    <Badge variant="outline" className="cursor-pointer hover:bg-gray-100">장군줄</Badge>
-                    <Badge variant="outline" className="cursor-pointer hover:bg-gray-100">도사줄</Badge>
+                    <Badge
+                        variant={selectedLine === null ? "default" : "outline"}
+                        className="cursor-pointer hover:bg-gray-100"
+                        onClick={() => setSelectedLine(null)}
+                    >
+                        전체
+                    </Badge>
+                    <Badge
+                        variant={selectedLine === "yonggung" ? "default" : "outline"}
+                        className="cursor-pointer hover:bg-gray-100"
+                        onClick={() => setSelectedLine("yonggung")}
+                    >
+                        용궁줄
+                    </Badge>
+                    <Badge
+                        variant={selectedLine === "sansin" ? "default" : "outline"}
+                        className="cursor-pointer hover:bg-gray-100"
+                        onClick={() => setSelectedLine("sansin")}
+                    >
+                        산신줄
+                    </Badge>
+                    <Badge
+                        variant={selectedLine === "janggun" ? "default" : "outline"}
+                        className="cursor-pointer hover:bg-gray-100"
+                        onClick={() => setSelectedLine("janggun")}
+                    >
+                        장군줄
+                    </Badge>
+                    <Badge
+                        variant={selectedLine === "dosa" ? "default" : "outline"}
+                        className="cursor-pointer hover:bg-gray-100"
+                        onClick={() => setSelectedLine("dosa")}
+                    >
+                        도사줄
+                    </Badge>
                 </div>
 
                 <div className="ml-auto flex items-center gap-2">
@@ -76,16 +165,25 @@ export default function MapPage() {
             <div className="relative flex flex-1 overflow-hidden">
                 {/* 좌측 리스트 패널 */}
                 <div
-                    className={`absolute inset-y-0 left-0 z-20 w-full bg-white transition-transform duration-300 md:relative md:w-96 md:translate-x-0 ${showList ? "translate-x-0" : "-translate-x-full md:-ml-96"
-                        } border-r border-gray-200 shadow-lg md:shadow-none`}
+                    className={`absolute inset-y-0 left-0 z-20 w-full bg-white transition-transform duration-300 md:relative md:w-96 md:translate-x-0 ${
+                        showList ? "translate-x-0" : "-translate-x-full md:-ml-96"
+                    } border-r border-gray-200 shadow-lg md:shadow-none`}
                 >
                     <div className="h-full overflow-y-auto p-4">
                         <div className="mb-4 text-sm text-gray-500">
-                            내 주변 2개의 기도터
+                            {places.length}개의 기도터
                         </div>
                         <div className="space-y-4">
-                            {MOCK_MAP_PLACES.map((place) => (
-                                <div key={place.id} className="h-64">
+                            {places.map((place) => (
+                                <div
+                                    key={place.id}
+                                    className={`h-64 cursor-pointer transition-all ${
+                                        selectedPlaceId === place.id
+                                            ? "ring-2 ring-primary rounded-2xl"
+                                            : ""
+                                    }`}
+                                    onClick={() => handlePlaceCardClick(place.id)}
+                                >
                                     <PrayerPlaceCard place={place} />
                                 </div>
                             ))}
@@ -102,14 +200,13 @@ export default function MapPage() {
                 </div>
 
                 {/* 우측 지도 영역 */}
-                <div className="flex-1 bg-gray-100">
-                    <div className="flex h-full w-full items-center justify-center text-gray-500">
-                        <div className="text-center">
-                            <MapPin className="mx-auto mb-2 h-12 w-12 text-gray-400" />
-                            <p className="text-lg font-medium">지도 영역</p>
-                            <p className="text-sm">Step 6에서 네이버 지도가 연동됩니다.</p>
-                        </div>
-                    </div>
+                <div className="flex-1 bg-gray-100 relative">
+                    <MapView
+                        places={places}
+                        selectedPlaceId={selectedPlaceId}
+                        onMarkerClick={handleMarkerClick}
+                        zoom={7}
+                    />
 
                     {/* 모바일에서 리스트 열기 버튼 (리스트가 닫혀있을 때) */}
                     {!showList && (
