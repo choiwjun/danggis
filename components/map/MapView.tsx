@@ -149,12 +149,33 @@ export default function MapView({
     if (isError) {
         return (
             <div className="flex h-full w-full items-center justify-center bg-gray-50">
-                <div className="text-center">
-                    <AlertCircle className="mx-auto mb-2 h-8 w-8 text-red-500" />
-                    <p className="text-sm text-gray-600">지도를 불러올 수 없습니다.</p>
-                    <p className="mt-1 text-xs text-gray-500">
-                        네이버 지도 API 키를 확인해주세요.
+                <div className="max-w-md text-center p-6">
+                    <AlertCircle className="mx-auto mb-4 h-12 w-12 text-red-500" />
+                    <h3 className="mb-2 text-lg font-semibold text-gray-900">
+                        지도를 불러올 수 없습니다
+                    </h3>
+                    <p className="mb-4 text-sm text-gray-600">
+                        네이버 지도 API 키가 설정되지 않았습니다.
                     </p>
+                    <div className="rounded-lg bg-yellow-50 p-4 text-left">
+                        <p className="text-xs font-semibold text-yellow-800 mb-2">
+                            ⚙️ 환경 변수 설정 필요:
+                        </p>
+                        <code className="block text-xs text-yellow-700 bg-yellow-100 p-2 rounded">
+                            NEXT_PUBLIC_NAVER_MAP_CLIENT_ID
+                        </code>
+                        <p className="mt-2 text-xs text-yellow-700">
+                            Vercel Dashboard → 프로젝트 → Settings → Environment Variables에서 설정
+                        </p>
+                    </div>
+                    <a
+                        href="https://www.ncloud.com/product/applicationService/maps"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 inline-block text-sm text-primary hover:underline"
+                    >
+                        네이버 클라우드 플랫폼 Maps API →
+                    </a>
                 </div>
             </div>
         );

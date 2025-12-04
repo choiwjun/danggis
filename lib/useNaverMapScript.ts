@@ -34,7 +34,11 @@ export function useNaverMapScript() {
         const clientId = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
 
         if (!clientId) {
-            console.error("NEXT_PUBLIC_NAVER_MAP_CLIENT_ID가 설정되지 않았습니다.");
+            console.error(
+                "⚠️ NEXT_PUBLIC_NAVER_MAP_CLIENT_ID가 설정되지 않았습니다.\n" +
+                "Vercel 환경 변수 설정 또는 .env.local 파일에 추가해주세요.\n" +
+                "https://www.ncloud.com/product/applicationService/maps"
+            );
             setIsError(true);
             return;
         }
