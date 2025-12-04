@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User, LogOut } from "lucide-react";
 import { useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Header() {
+    const { data: session, status } = useSession();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const navItems = [
@@ -14,7 +16,6 @@ export default function Header() {
         { label: "줄별 기도터", href: "/lines" },
         { label: "후기", href: "/reviews" },
         { label: "당골래 AI", href: "/ai" },
-        { label: "마이페이지", href: "/my" },
     ];
 
     return (
@@ -38,6 +39,45 @@ export default function Header() {
                             </Link>
                         ))}
                     </nav>
+
+                    {/* 데스크탑 인증 메뉴 */}
+                    <div className="hidden md:flex md:items-center md:space-x-4">
+                        {status === "loading" ? (
+                            <div className="h-8 w-20 animate-pulse rounded bg-gray-200"></div>
+                        ) : session ? (
+                            <div className="flex items-center space-x-4">
+                                <Link
+                                    href="/my"
+                                    className="flex items-center text-sm font-medium text-gray-700 hover:text-primary"
+                                >
+                                    <User className="mr-1 h-4 w-4" />
+                                    마이페이지
+                                </Link>
+                                <button
+                                    onClick={() => signOut()}
+                                    className="flex items-center text-sm font-medium text-gray-500 hover:text-red-600"
+                                >
+                                    <LogOut className="mr-1 h-4 w-4" />
+                                    로그아웃
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex items-center space-x-4">
+                                <Link
+                                    href="/auth/signin"
+                                    className="text-sm font-medium text-gray-700 hover:text-primary"
+                                >
+                                    로그인
+                                </Link>
+                                <Link
+                                    href="/auth/signup"
+                                    className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark"
+                                >
+                                    회원가입
+                                </Link>
+                            </div>
+                        )}
+                    </div>
 
                     {/* 모바일 메뉴 버튼 */}
                     <button
@@ -69,6 +109,46 @@ export default function Header() {
                                 {item.label}
                             </Link>
                         ))}
+
+                        <div className="mt-4 border-t border-gray-100 pt-4">
+                            {session ? (
+                                <>
+                                    <Link
+                                        href="/my"
+                                        className="block rounded-lg px-3 py-2 text-base font-medium text-gray-700 hover:bg-primary-soft hover:text-primary"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                        마이페이지
+                                    </Link>
+                                    <button
+                                        onClick={() => {
+                                            setMobileMenuOpen(false);
+                                            signOut();
+                                        }}
+                                        className="block w-full rounded-lg px-3 py-2 text-left text-base font-medium text-gray-500 hover:bg-red-50 hover:text-red-600"
+                                    >
+                                        로그아웃
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <Link
+                                        href="/auth/signin"
+                                        className="block rounded-lg px-3 py-2 text-base font-medium text-gray-700 hover:bg-primary-soft hover:text-primary"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                        로그인
+                                    </Link>
+                                    <Link
+                                        href="/auth/signup"
+                                        className="block rounded-lg px-3 py-2 text-base font-medium text-primary hover:bg-primary-soft"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                        회원가입
+                                    </Link>
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
             )}

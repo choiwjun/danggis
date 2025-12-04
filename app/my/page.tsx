@@ -1,6 +1,15 @@
 import { User, Heart, MessageSquare } from "lucide-react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
-export default function MyPage() {
+export default async function MyPage() {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+        redirect("/auth/signin");
+    }
+
     return (
         <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
             <h1 className="mb-8 text-3xl font-bold text-gray-900">마이페이지</h1>
@@ -13,9 +22,9 @@ export default function MyPage() {
                     </div>
                     <div>
                         <h2 className="text-xl font-semibold text-gray-900">
-                            사용자명 (로그인 후 표시)
+                            {session.user?.name || "사용자"}
                         </h2>
-                        <p className="text-sm text-gray-600">email@example.com</p>
+                        <p className="text-sm text-gray-600">{session.user?.email}</p>
                     </div>
                 </div>
             </div>
