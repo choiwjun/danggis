@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { PLACE_IMAGES } from "@/lib/placeholderImage";
 
 interface Review {
     id: string;
@@ -40,7 +41,7 @@ const MOCK_REVIEWS: Review[] = [
         createdAt: "2024-11-28",
         likes: 24,
         comments: 5,
-        images: ["https://images.unsplash.com/photo-1518182170546-0766aa6f6914?w=800&q=80"],
+        images: [PLACE_IMAGES.sansin],
         lineTag: { code: "sansin", nameKo: "산신줄" },
     },
     {
@@ -67,10 +68,7 @@ const MOCK_REVIEWS: Review[] = [
         createdAt: "2024-11-20",
         likes: 42,
         comments: 12,
-        images: [
-            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
-            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80",
-        ],
+        images: [PLACE_IMAGES.yonggung, PLACE_IMAGES.yonggung],
         lineTag: { code: "yonggung", nameKo: "용궁줄" },
     },
     {

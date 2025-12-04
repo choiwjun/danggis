@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import PrayerPlaceCard from "@/components/places/PrayerPlaceCard";
-import MapView from "@/components/map/MapView";
+import MockMapView from "@/components/map/MockMapView";
 import { PlaceListItem } from "@/types/place";
+
+import { PLACE_IMAGES } from "@/lib/placeholderImage";
 
 // Mock Data for Map List (나중에 API로 대체)
 const MOCK_MAP_PLACES: PlaceListItem[] = [
@@ -20,7 +22,7 @@ const MOCK_MAP_PLACES: PlaceListItem[] = [
         longitude: 127.2175,
         placeType: { id: "t1", nameKo: "굿당" },
         deityTags: [{ deityTag: { id: "d1", code: "sansin", nameKo: "산신줄" } }],
-        thumbnail: "https://images.unsplash.com/photo-1518182170546-0766aa6f6914?w=800&q=80",
+        thumbnail: PLACE_IMAGES.sansin,
         reviewCount: 12,
         averageRating: 4.5,
         distance: 1.2,
@@ -34,7 +36,7 @@ const MOCK_MAP_PLACES: PlaceListItem[] = [
         longitude: 128.9857,
         placeType: { id: "t2", nameKo: "기도터" },
         deityTags: [{ deityTag: { id: "d2", code: "janggun", nameKo: "장군줄" } }],
-        thumbnail: "https://images.unsplash.com/photo-1505567745926-ba89000d255a?w=800&q=80",
+        thumbnail: PLACE_IMAGES.janggun,
         reviewCount: 8,
         averageRating: 4.8,
         distance: 5.4,
@@ -48,7 +50,7 @@ const MOCK_MAP_PLACES: PlaceListItem[] = [
         longitude: 127.7314,
         placeType: { id: "t3", nameKo: "용궁" },
         deityTags: [{ deityTag: { id: "d3", code: "yonggung", nameKo: "용궁줄" } }],
-        thumbnail: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
+        thumbnail: PLACE_IMAGES.yonggung,
         reviewCount: 24,
         averageRating: 4.2,
         distance: 3.5,
@@ -201,7 +203,7 @@ export default function MapPage() {
 
                 {/* 우측 지도 영역 */}
                 <div className="flex-1 bg-gray-100 relative">
-                    <MapView
+                    <MockMapView
                         places={places}
                         selectedPlaceId={selectedPlaceId}
                         onMarkerClick={handleMarkerClick}

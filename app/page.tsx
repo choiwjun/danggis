@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import PrayerPlaceCard from "@/components/places/PrayerPlaceCard";
 import { PlaceListItem } from "@/types/place";
+import { PLACE_IMAGES } from "@/lib/placeholderImage";
 
 // Mock Data
 const MOCK_PLACES: PlaceListItem[] = [
@@ -14,7 +15,7 @@ const MOCK_PLACES: PlaceListItem[] = [
     addressFull: "충청남도 공주시 계룡면",
     placeType: { id: "t1", nameKo: "굿당" },
     deityTags: [{ deityTag: { id: "d1", code: "sansin", nameKo: "산신줄" } }],
-    thumbnail: "https://images.unsplash.com/photo-1518182170546-0766aa6f6914?w=800&q=80",
+    thumbnail: PLACE_IMAGES.sansin,
     reviewCount: 12,
     averageRating: 4.5,
   },
@@ -25,7 +26,7 @@ const MOCK_PLACES: PlaceListItem[] = [
     addressFull: "강원도 태백시",
     placeType: { id: "t2", nameKo: "기도터" },
     deityTags: [{ deityTag: { id: "d2", code: "janggun", nameKo: "장군줄" } }],
-    thumbnail: "https://images.unsplash.com/photo-1505567745926-ba89000d255a?w=800&q=80",
+    thumbnail: PLACE_IMAGES.janggun,
     reviewCount: 8,
     averageRating: 4.8,
   },
@@ -36,7 +37,7 @@ const MOCK_PLACES: PlaceListItem[] = [
     addressFull: "전라남도 구례군",
     placeType: { id: "t3", nameKo: "용궁" },
     deityTags: [{ deityTag: { id: "d3", code: "yonggung", nameKo: "용궁줄" } }],
-    thumbnail: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
+    thumbnail: PLACE_IMAGES.yonggung,
     reviewCount: 24,
     averageRating: 4.2,
   },
@@ -47,7 +48,7 @@ const MOCK_PLACES: PlaceListItem[] = [
     addressFull: "서울특별시 종로구",
     placeType: { id: "t4", nameKo: "기도터" },
     deityTags: [{ deityTag: { id: "d4", code: "dosa", nameKo: "도사줄" } }],
-    thumbnail: "https://images.unsplash.com/photo-1504194921103-f8b80cadd5e4?w=800&q=80",
+    thumbnail: PLACE_IMAGES.dosa,
     reviewCount: 56,
     averageRating: 4.6,
   },

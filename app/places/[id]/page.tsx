@@ -7,7 +7,7 @@ import { MapPin, Phone, Clock, Globe, Share2, Heart, MessageSquare, Sparkles, Lo
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import PlaceDetailMap from "@/components/map/PlaceDetailMap";
+import MockPlaceDetailMap from "@/components/map/MockPlaceDetailMap";
 import PlaceChatDrawer from "@/components/ai/PlaceChatDrawer";
 import { PlaceDetail } from "@/types/place";
 
@@ -152,7 +152,7 @@ export default function PlaceDetailPage() {
                     {place.latitude && place.longitude && (
                         <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
                             <h2 className="mb-4 text-xl font-bold text-gray-900">위치</h2>
-                            <PlaceDetailMap
+                            <MockPlaceDetailMap
                                 latitude={place.latitude}
                                 longitude={place.longitude}
                                 placeName={place.name}
