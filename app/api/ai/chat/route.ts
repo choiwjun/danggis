@@ -94,6 +94,14 @@ export async function POST(request: NextRequest) {
             systemPrompt = getSajuModePrompt(body.sajuResult);
         }
 
+        // sessionId가 없으면 에러 (이론적으로 불가능하지만 타입 안전성을 위해)
+        if (!sessionId) {
+            return NextResponse.json(
+                { error: "세션 ID를 생성할 수 없습니다." },
+                { status: 500 }
+            );
+        }
+
         // 사용자 메시지 저장
         const userMessage = body.messages[body.messages.length - 1];
         await prisma.aiMessage.create({
